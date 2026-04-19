@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help — Weatherly</title>
+    <link rel="icon" href="/img/weather.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .help-section {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 24px 96px;
+        }
+
+        .page-eyebrow {
+            font-size: 11px;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .help-heading {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .help-heading span {
+            color: #26d0ce;
+        }
+
+        .faq-list {
+            width: 100%;
+            max-width: 620px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .faq-item:nth-child(2) { animation-delay: 0.06s; }
+        .faq-item:nth-child(3) { animation-delay: 0.12s; }
+        .faq-item:nth-child(4) { animation-delay: 0.18s; }
+        .faq-item:nth-child(5) { animation-delay: 0.24s; }
+
+        .faq-btn {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            gap: 16px;
+            transition: background 0.2s;
+        }
+
+        .faq-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .faq-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(38, 208, 206, 0.4);
+            color: #26d0ce;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
+            line-height: 1;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+            background: rgba(38, 208, 206, 0.15);
+        }
+
+        .faq-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-item.open .faq-body {
+            max-height: 300px;
+        }
+
+        .faq-body p {
+            padding: 0 24px 22px;
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            padding-top: 16px;
+            margin-top: 0;
+        }
+
+        .faq-body a {
+            color: #26d0ce;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(38, 208, 206, 0.3);
+            transition: border-color 0.2s;
+        }
+
+        .faq-body a:hover {
+            border-color: rgba(38, 208, 206, 0.8);
+        }
+
+        /* Custom helpText block (if passed from server) */
+        .custom-msg {
+            width: 100%;
+            max-width: 620px;
+            background: rgba(38, 208, 206, 0.08);
+            border: 1px solid rgba(38, 208, 206, 0.2);
+            border-radius: 20px;
+            padding: 24px 28px;
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+            margin-bottom: 32px;
+            backdrop-filter: blur(12px);
+            animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sky">
+        <div class="clouds" aria-hidden="true">
+            <div class="cloud" style="width:280px;height:56px;top:12%;animation-duration:46s;animation-delay:-6s;"></div>
+            <div class="cloud" style="width:160px;height:36px;top:40%;animation-duration:62s;animation-delay:-28s;"></div>
+            <div class="cloud" style="width:220px;height:48px;top:70%;animation-duration:54s;animation-delay:-40s;"></div>
+        </div>
+        <div class="stars" id="stars" aria-hidden="true"></div>
+
+        {{>header}}
+
+        <section class="help-section">
+            <p class="page-eyebrow">Support</p>
+            <h1 class="help-heading">How can we <span>help?</span></h1>
+
+            {{#if helpText}}
+            <div class="custom-msg">{{helpText}}</div>
+            {{/if}}
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-btn" aria-expanded="false">
+                        How do I search for a location?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-body">
+                        <p>Type any city name, town, or address into the search bar on the home page and press <strong>Search</strong> or hit Enter. Try to be specific — e.g. <em>"London, UK"</em> rather than just <em>"London"</em> — for the best results.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-btn" aria-expanded="false">
+                        Why is my location not found?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-body">
+                        <p>Make sure the city name is spelled correctly. Very small towns may not be in the Mapbox database. Try searching for a nearby larger city instead, or add the country name for disambiguation (e.g. <em>"Springfield, USA"</em>).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-btn" aria-expanded="false">
+                        Where does the weather data come from?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-body">
+                        <p>Forecast data is sourced from <a href="https://weatherstack.com" target="_blank" rel="noopener">weatherstack.com</a>. Location coordinates are resolved via the <a href="https://mapbox.com" target="_blank" rel="noopener">Mapbox Geocoding API</a>. Both services update their data in real time.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-btn" aria-expanded="false">
+                        What units are used?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-body">
+                        <p>Temperature is shown in <strong>Celsius (°C)</strong> and wind speed in <strong>km/h</strong>. If you'd like Fahrenheit support added, feel free to reach out to the developer.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-btn" aria-expanded="false">
+                        How accurate is the forecast?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-body">
+                        <p>Weatherly shows the current conditions for a location rather than a multi-day forecast. Accuracy depends on the Weatherstack data feed, which is generally reliable for major and mid-size cities worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{>footer}}
+    </div>
+
+    <script>
+        // Stars
+        const starsEl = document.getElementById('stars');
+        for (let i = 0; i < 70; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const sz = Math.random() * 2.5 + 0.8;
+            s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random() * 100}%;left:${Math.random() * 100}%;animation-delay:${(Math.random() * 4).toFixed(2)}s;animation-duration:${(2 + Math.random() * 3).toFixed(2)}s;`;
+            starsEl.appendChild(s);
+        }
+
+        // Accordion
+        document.querySelectorAll('.faq-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.faq-item');
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(el => {
+                    el.classList.remove('open');
+                    el.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+                });
+                if (!isOpen) {
+                    item.classList.add('open');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
